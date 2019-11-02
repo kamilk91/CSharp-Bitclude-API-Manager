@@ -32,6 +32,24 @@ namespace BuyCheap.Methods
             this.client = new RestClient("https://api.bitclude.com/");
         }
 
+        public BCRestClient()
+        {
+            this.client = new RestClient("https://api.bitclude.com/");
+        }
+
+        /// <summary>
+        /// Get orderbook for specify markets.
+        /// </summary>
+        /// <param name="crypto"></param>
+        /// <param name="fiat"></param>
+        /// <returns></returns>
+        public OrderBookModel OrderBook(CryptoCurrency crypto, FiatCurrency fiat)
+        {
+            IRestRequest req = new RestRequest($"/stats/orderbook_{crypto.ToString().ToLower()}{fiat.ToString().ToLower()}.json");
+            string response = client.Execute(req).Content;
+            OrderBookModel orderbook = JsonConvert.DeserializeObject<OrderBookModel>(response);
+            return orderbook;
+        }
         /// <summary>
         /// Get info about account. Returns model object of Getinfo method. 
         /// </summary>
@@ -40,6 +58,8 @@ namespace BuyCheap.Methods
         /// </returns>
         public GetInfoModel GetInfo()
         {
+            if (key == null || secret == null)
+                throw new ArgumentException("This method need key and secret (key and id)");
             IRestRequest req = new RestRequest();
             req = addMandatoryParameters(req, "account", "info");
             string resp = client.Execute(req).Content;
@@ -49,10 +69,6 @@ namespace BuyCheap.Methods
         }
 
 
-        public OrderBookModel OrderBook()
-        {
-            throw new NotImplementedException();
-        }
 
 
         /// <summary>
@@ -62,6 +78,8 @@ namespace BuyCheap.Methods
 
         public TransactionModel GetActiveTransactions()
         {
+            if (key == null || secret == null)
+                throw new ArgumentException("This method need key and secret (key and id)");
             IRestRequest req = new RestRequest();
             req = addMandatoryParameters(req, "account", "activeoffers");
             string response = client.Execute(req).Content;
@@ -78,6 +96,8 @@ namespace BuyCheap.Methods
         /// <returns></returns>
         public CancelTransactionResponse CancelOffer(Offer transaction)
         {
+            if (key == null || secret == null)
+                throw new ArgumentException("This method need key and secret (key and id)");
             IRestRequest req = new RestRequest();
             req = addMandatoryParameters(req, "transactions", "cancel");
             req.AddParameter("order", transaction.nr);
@@ -93,6 +113,8 @@ namespace BuyCheap.Methods
         /// <returns></returns>
         public GetHistoryModel GetHistory()
         {
+            if (key == null || secret == null)
+                throw new ArgumentException("This method need key and secret (key and id)");
             IRestRequest req = new RestRequest();
             req = addMandatoryParameters(req, "account", "history");
             string resp = client.Execute(req).Content;
@@ -100,8 +122,16 @@ namespace BuyCheap.Methods
         }
 
 
+        /// <summary>
+        /// Place new transaction on specify market. Use new LimitTransactionModel to create new transaction object.
+        /// </summary>
+        /// <param name="transaction"></param>
+        /// <returns></returns>
+
         public NewTransactionResponseModel PlaceOrder(LimitTransactionModel transaction)
         {
+            if (key == null || secret == null)
+                throw new ArgumentException("This method need key and secret (key and id)");
             IRestRequest req = new RestRequest();
             req = addMandatoryParameters(req, "transactions", transaction.action);
             req.AddParameter("market1", transaction.market1);

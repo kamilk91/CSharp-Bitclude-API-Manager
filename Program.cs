@@ -1,6 +1,7 @@
 ﻿using BuyCheap.Methods;
 using BuyCheap.Models;
 using System;
+using System.Collections;
 using System.Threading;
 
 namespace BuyCheap
@@ -9,36 +10,27 @@ namespace BuyCheap
     {
         static void Main(string[] args)
         {
-    
-            BCRestClient bcClient = new BCRestClient("key", "id");
-            
-            
-            NewTransactionResponseModel newTrans  = bcClient.PlaceOrder(new LimitTransactionModel
+
+            BCRestClient bcClient = new BCRestClient();
+            bcClient.CancelOffer(new Offer());
+
+
+            OrderBookModel ob = bcClient.OrderBook(CryptoCurrency.BTC, FiatCurrency.PLN);
+            Console.WriteLine($"Asks:");
+
+            foreach (IList ask in ob.asks)
             {
-                action = TransactionType.BUY,
-                amount = "10",
-                rate = "1",
-                market1 = CryptoCurrency.BTC,
-                market2 = FiatCurrency.PLN,
-                
-            });
 
-            if(newTrans.success)
-            {
-                Console.WriteLine($"Offer {newTrans.code} placed with message {newTrans.message}");
-        
-
-                TransactionModel transactions = bcClient.GetActiveTransactions();
-                foreach(Offer trans in transactions.offers)
-                {
-
-                    Console.WriteLine($"Canceling {trans.nr} {trans.price} {trans.offertype}");
-                    bcClient.CancelOffer(trans);
-                }
+                Console.WriteLine($"  {ask[0]} | {ask[1]}");
             }
 
+            Console.WriteLine("Bids:");
+            foreach (IList bid in ob.bids)
+            {
+                Console.WriteLine($"  {bid[0]} | {bid[1]}");
+            }
 
-
+            Console.ReadLine();
         }
     }
 }
