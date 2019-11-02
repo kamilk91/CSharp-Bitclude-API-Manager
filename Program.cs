@@ -9,8 +9,8 @@ namespace BuyCheap
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            BCRestClient bcClient = new BCRestClient("", "");
+    
+            BCRestClient bcClient = new BCRestClient("key", "id");
             
             
             NewTransactionResponseModel newTrans  = bcClient.PlaceOrder(new LimitTransactionModel
@@ -26,14 +26,13 @@ namespace BuyCheap
             if(newTrans.success)
             {
                 Console.WriteLine($"Offer {newTrans.code} placed with message {newTrans.message}");
-                Thread.Sleep(5000);
+        
 
                 TransactionModel transactions = bcClient.GetActiveTransactions();
                 foreach(Offer trans in transactions.offers)
                 {
 
                     Console.WriteLine($"Canceling {trans.nr} {trans.price} {trans.offertype}");
-                    Thread.Sleep(1000);
                     bcClient.CancelOffer(trans);
                 }
             }
