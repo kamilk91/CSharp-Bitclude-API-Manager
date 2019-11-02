@@ -4,7 +4,7 @@ Bitclude.com market: [Bitclude.com](https://bitclude.com/r/554934414)
 
 C# API connector to market bitclude, allows you placing, seeing, and managing offers.
 
-Library is PLUGandPLAY. Just provice your data, and go!
+Library is PLUGandPLAY. Just provide your data, and go!
 ## Requirements
 
 * Newtonsoft.JSON
