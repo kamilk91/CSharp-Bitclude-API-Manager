@@ -11,7 +11,8 @@ C# API connector to market bitclude, allows you placing, seeing, and managing of
 * WebSocketSharp (optional)
 ## Methods
 
-Methods are described in <summary>. Easy to use. 
+Methods are described in summary. 
+Easy to use. 
 
 ## Example
 
