@@ -58,7 +58,7 @@ namespace BuyCheap.Methods
         /// </returns>
         public GetInfoModel GetInfo()
         {
-            if (key == null || secret == null)
+            if (!IsPrivateAPIPossible())
                 throw new ArgumentException("This method need key and secret (key and id)");
             IRestRequest req = new RestRequest();
             req = addMandatoryParameters(req, "account", "info");
@@ -78,7 +78,7 @@ namespace BuyCheap.Methods
 
         public TransactionModel GetActiveTransactions()
         {
-            if (key == null || secret == null)
+            if (!IsPrivateAPIPossible())
                 throw new ArgumentException("This method need key and secret (key and id)");
             IRestRequest req = new RestRequest();
             req = addMandatoryParameters(req, "account", "activeoffers");
@@ -96,7 +96,7 @@ namespace BuyCheap.Methods
         /// <returns></returns>
         public CancelTransactionResponse CancelOffer(Offer transaction)
         {
-            if (key == null || secret == null)
+            if (!IsPrivateAPIPossible())
                 throw new ArgumentException("This method need key and secret (key and id)");
             IRestRequest req = new RestRequest();
             req = addMandatoryParameters(req, "transactions", "cancel");
@@ -113,7 +113,7 @@ namespace BuyCheap.Methods
         /// <returns></returns>
         public GetHistoryModel GetHistory()
         {
-            if (key == null || secret == null)
+            if (!IsPrivateAPIPossible())
                 throw new ArgumentException("This method need key and secret (key and id)");
             IRestRequest req = new RestRequest();
             req = addMandatoryParameters(req, "account", "history");
@@ -164,9 +164,20 @@ namespace BuyCheap.Methods
             return req;
         }
 
+        private bool IsPrivateAPIPossible()
+        {
+            if (key == null || secret == null)
+            { 
+                return false; 
+            }
+            else
+            {
+                return true;
+            }
+        }
 
     }
 
 
-    
+
 }
